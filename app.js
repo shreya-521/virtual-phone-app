@@ -559,7 +559,7 @@ function showToast(message, type = 'info') {
 
 function saveState() {
     try {
-        localStorage.setItem('temporary_phone_state', JSON.stringify({
+        localStorage.setItem('virtual_phone_state', JSON.stringify({
             userTier: AppState.userTier,
             rateLimitMax: AppState.rateLimitMax,
             dailyCount: AppState.dailyCount,
@@ -574,7 +574,7 @@ function saveState() {
 
 function loadSavedState() {
     try {
-        const saved = localStorage.getItem('temporary_phone_state');
+        const saved = localStorage.getItem('virtual_phone_state');
         if (saved) {
             const parsed = JSON.parse(saved);
             AppState.userTier = parsed.userTier || 'free';

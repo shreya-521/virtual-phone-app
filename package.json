@@ -1,5 +1,5 @@
 {
-  "name": "temporary-phone-app",
+  "name": "virtual-phone-app",
   "version": "1.0.0",
   "description": "Secure Virtual Phone Number Generator and OTP Receiver application in Crimson Red glassmorphic UI",
   "main": "server.js",
