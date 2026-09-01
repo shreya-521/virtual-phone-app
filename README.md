@@ -1,7 +1,6 @@
 # 📱 VirtualPhone — Secure Virtual Phone Generator & OTP Receiver
 
-A modern, privacy-compliant, mobile and desktop responsive **Virtual Phone Number Generator & OTP Receiver Application** built with a **Crimson Red** dark glassmorphic design system (`#e11d48`, `#be123c`, `#4c0519`, `#0f172a`).
-
+A modern, privacy-compliant, mobile and desktop responsive **Virtual Phone Number Generator & OTP Receiver Application**.
 ---
 
 ## 🌟 Key Features
