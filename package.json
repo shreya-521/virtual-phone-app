@@ -1,0 +1,23 @@
+{
+  "name": "temporary-phone-app",
+  "version": "1.0.0",
+  "description": "Secure Virtual Phone Number Generator and OTP Receiver application in Crimson Red glassmorphic UI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "keywords": [
+    "virtual-phone",
+    "otp-receiver",
+    "e164",
+    "rate-limiting",
+    "security-headers",
+    "dpdp-act"
+  ],
+  "author": "Antigravity AI",
+  "license": "MIT"
+}

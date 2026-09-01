@@ -1,0 +1,24 @@
+# Gitleaks Security Configuration Rule File
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''\.env\.example$''',
+    '''package\.json$'''
+]
+
+[[rules]]
+description = "Twilio Account SID"
+id = "twilio-account-sid"
+regex = '''AC[a-zA-Z0-9]{32}'''
+keywords = ["twilio", "account_sid"]
+
+[[rules]]
+description = "Twilio Auth Token"
+id = "twilio-auth-token"
+regex = '''[a-zA-Z0-9]{32}'''
+keywords = ["auth_token", "twilio_secret"]
+
+[[rules]]
+description = "Generic Private Key"
+id = "generic-api-key"
+regex = '''(?i)(api_key|apikey|secret|password|auth_token)\s*[:=]\s*["'][A-Za-z0-9_\-]{16,}["']'''

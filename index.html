@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Meta Tags -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <title>TemporaryPhone - Secure Virtual Phone & OTP Platform</title>
+    <meta name="description" content="Generate E.164 compliant reserved test phone numbers and receive OTP verification codes securely with rate limiting and DPDP/GDPR privacy compliance.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Legal & Security Disclaimer Top Banner -->
+    <div class="top-disclaimer-bar">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span><strong>DISCLAIMER:</strong> Generated numbers are strictly for development & testing purposes (using ITU/NANP reserved ranges). Do not use for spam, fraud, or impersonation.</span>
+        <button class="btn-xs btn-outline-light" id="btn-view-terms">Terms of Use</button>
+    </div>
+
+    <div class="app-container">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="custom-brand-logo">
+                    <span class="logo-big-t">T</span>
+                    <div class="logo-text-stack">
+                        <span class="logo-text-top">emporary</span>
+                        <span class="logo-text-bottom">PHONE</span>
+                    </div>
+                </div>
+                <span class="badge tier-badge" id="sidebar-tier-badge">FREE TIER</span>
+            </div>
+
+            <!-- Rate Limit Usage Meter Card -->
+            <div class="rate-limit-card">
+                <div class="rate-limit-header">
+                    <span><i class="fa-solid fa-gauge-high"></i> API Rate Limit</span>
+                    <span id="rate-counter-text">0 / 10 min</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="rate-progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="daily-cap-text">
+                    Daily Cap: <span id="daily-counter-text">0 / 500</span> used
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-table-cells-large"></i> Dashboard
+                </a>
+                <a href="#generator" class="nav-item" data-tab="generator">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Number Generator
+                </a>
+                <a href="#inbox" class="nav-item" data-tab="inbox">
+                    <i class="fa-solid fa-inbox"></i> Live OTP Stream
+                    <span class="unread-badge" id="unread-count">0</span>
+                </a>
+                <a href="#security" class="nav-item" data-tab="security">
+                    <i class="fa-solid fa-lock"></i> Security & Headers
+                </a>
+                <a href="#privacy" class="nav-item" data-tab="privacy">
+                    <i class="fa-solid fa-user-shield"></i> Privacy & DPDP Act
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-widget">
+                    <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-role-display">Developer (Free)</span>
+                        <button class="link-btn" id="btn-toggle-tier">Switch to Pro (100/min)</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="top-header">
+                <div class="mobile-brand-title">
+                    <div class="custom-brand-logo">
+                        <span class="logo-big-t">T</span>
+                        <div class="logo-text-stack">
+                            <span class="logo-text-top">emporary</span>
+                            <span class="logo-text-bottom">PHONE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="Search test numbers, OTP codes, or services...">
+                </div>
+
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btn-quick-gen">
+                        <i class="fa-solid fa-plus"></i> Gen Number
+                    </button>
+                    <button class="btn btn-crimson" id="btn-sim-sms">
+                        <i class="fa-solid fa-paper-plane"></i> Simulate SMS
+                    </button>
+                </div>
+            </header>
+
+            <!-- Tab 1: Dashboard -->
+            <section class="tab-content active" id="tab-dashboard">
+                <div class="hero-banner">
+                    <div class="hero-content">
+                        <h1>Secure Virtual Number & OTP Testing Engine</h1>
+                        <p>Generate ITU-T & NANP non-colliding reserved test phone numbers in E.164 format with built-in rate limiting, Zod validation, and DPDP Act 2023 compliance.</p>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <span class="stat-val" id="stat-active-num">3</span>
+                            <span class="stat-lbl">Active Test Numbers</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-val" id="stat-sms-count">0</span>
+                            <span class="stat-lbl">Received OTPs</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-val" id="stat-rate-status">100%</span>
+                            <span class="stat-lbl">Quota Remaining</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Test Numbers -->
+                <div class="section-header">
+                    <h3><i class="fa-solid fa-mobile-retro"></i> Active Reserved Test Numbers</h3>
+                    <span class="text-hint">E.164 Standard • Non-colliding ITU/NANP Reserved Ranges</span>
+                </div>
+
+                <div class="numbers-grid" id="dashboard-numbers-grid">
+                    <!-- Dynamic Javascript Rendering -->
+                </div>
+
+                <!-- Real-time SMS Feed -->
+                <div class="section-header mt-4">
+                    <h3><i class="fa-solid fa-bolt-lightning"></i> Real-Time Live OTP Stream</h3>
+                    <div class="filter-pills">
+                        <button class="pill active" data-filter="all">All</button>
+                        <button class="pill" data-filter="whatsapp">WhatsApp</button>
+                        <button class="pill" data-filter="google">Google</button>
+                        <button class="pill" data-filter="uber">Uber</button>
+                        <button class="pill" data-filter="bank">Bank OTPs</button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <table class="sms-table">
+                        <thead>
+                            <tr>
+                                <th>Service / Sender</th>
+                                <th>Target E.164 Number</th>
+                                <th>Message Payload</th>
+                                <th>Parsed OTP</th>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-sms-tbody">
+                            <tr class="empty-row">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <i class="fa-regular fa-comments"></i>
+                                        <p>No incoming SMS yet. Click <strong>"Simulate SMS"</strong> above to test your OTP regex parser!</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Tab 2: Generator Studio -->
+            <section class="tab-content" id="tab-generator">
+                <div class="page-title-bar">
+                    <div>
+                        <h2><i class="fa-solid fa-wand-magic-sparkles"></i> E.164 Virtual Number Generator</h2>
+                        <p>Generate non-colliding ITU-T / NANP reserved range numbers with strict input validation.</p>
+                    </div>
+                </div>
+
+                <div class="generator-container">
+                    <div class="card form-card">
+                        <h3>Generator Configuration</h3>
+                        <form id="gen-form">
+                            <div class="form-group">
+                                <label for="gen-country">Select Country & ITU Standard</label>
+                                <select id="gen-country" class="form-control">
+                                    <option value="US">🇺🇸 United States (+1 555-01XX NANP Reserved)</option>
+                                    <option value="UK">🇬🇧 United Kingdom (+44 7700 900XXX Ofcom Reserved)</option>
+                                    <option value="CA">🇨🇦 Canada (+1 555-01XX Reserved)</option>
+                                    <option value="IN">🇮🇳 India (+91 99999 XXXXX Test Range)</option>
+                                    <option value="DE">🇩🇪 Germany (+49 1522 888XXXX Reserved)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gen-label">Label / Test Suite Tag (Sanitized)</label>
+                                <input type="text" id="gen-label" class="form-control" placeholder="e.g. Auth Regression Test Suite" maxlength="40">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Rate Limit Check & Security Audit</label>
+                                <div class="audit-badge-box">
+                                    <span class="badge-tag green"><i class="fa-solid fa-check"></i> E.164 Format</span>
+                                    <span class="badge-tag green"><i class="fa-solid fa-check"></i> Anti-Collision</span>
+                                    <span class="badge-tag green"><i class="fa-solid fa-check"></i> Zod Sanitized</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-crimson btn-block" id="btn-submit-gen">
+                                <i class="fa-solid fa-shield-cat"></i> Generate Validated E.164 Number
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="card info-card">
+                        <h3><i class="fa-solid fa-book-bookmark"></i> ITU & NANP Anti-Collision Rules</h3>
+                        <p class="text-muted">To prevent generating real telephone numbers owned by actual subscribers, this engine strictly restricts output to internationally designated test ranges:</p>
+                        
+                        <ul class="rule-list mt-3">
+                            <li><strong>USA & Canada (NANP)</strong>: Reserved range <code>+1 NXX 555-0100</code> through <code>555-0199</code>.</li>
+                            <li><strong>United Kingdom (Ofcom)</strong>: Reserved range <code>+44 7700 900000</code> to <code>7700 900999</code>.</li>
+                            <li><strong>Germany (BNetzA)</strong>: Reserved range <code>+49 1522 8880000</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 3: Live OTP Inbox -->
+            <section class="tab-content" id="tab-inbox">
+                <div class="page-title-bar">
+                    <div>
+                        <h2><i class="fa-solid fa-inbox"></i> Live OTP Stream & Parser</h2>
+                        <p>Real-time SMS inbox with automatic regex code extraction and 1-click copy.</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btn-clear-stream">
+                        <i class="fa-solid fa-trash-can"></i> Clear Stream
+                    </button>
+                </div>
+
+                <div class="sms-stream-container" id="inbox-sms-stream">
+                    <!-- Cards rendered by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Tab 4: Security & Headers -->
+            <section class="tab-content" id="tab-security">
+                <div class="page-title-bar">
+                    <div>
+                        <h2><i class="fa-solid fa-lock"></i> Security Headers & Rate Limit Engine</h2>
+                        <p>Overview of active security controls, anti-scraping rules, and HTTP response headers.</p>
+                    </div>
+                </div>
+
+                <div class="security-grid">
+                    <div class="card sec-card">
+                        <div class="sec-icon"><i class="fa-solid fa-shield-virus"></i></div>
+                        <h4>Abuse & Rate Limiting</h4>
+                        <ul class="sec-list">
+                            <li><strong>Free Tier</strong>: 10 numbers / min / user</li>
+                            <li><strong>Paid Tier</strong>: 100 numbers / min / user</li>
+                            <li><strong>Daily Cap</strong>: 500 numbers / day (Free)</li>
+                            <li><strong>Scraper Ban</strong>: 1,000+ req/hr triggers automated IP block</li>
+                        </ul>
+                    </div>
+
+                    <div class="card sec-card">
+                        <div class="sec-icon"><i class="fa-solid fa-file-shield"></i></div>
+                        <h4>HTTP Security Headers</h4>
+                        <ul class="sec-list">
+                            <li><code>Content-Security-Policy</code>: Strict</li>
+                            <li><code>Strict-Transport-Security</code>: 1 Year</li>
+                            <li><code>X-Frame-Options</code>: DENY</li>
+                            <li><code>X-Content-Type-Options</code>: nosniff</li>
+                            <li><code>Referrer-Policy</code>: strict-origin-when-cross-origin</li>
+                        </ul>
+                    </div>
+
+                    <div class="card sec-card">
+                        <div class="sec-icon"><i class="fa-solid fa-key"></i></div>
+                        <h4>Secrets & Input Sanitization</h4>
+                        <ul class="sec-list">
+                            <li>No hardcoded API credentials</li>
+                            <li><code>.gitleaks.toml</code> pre-commit hook scanning</li>
+                            <li>Zod server-side schema validation</li>
+                            <li>XSS prevention via safe DOM text nodes</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 5: Privacy & DPDP Act 2023 -->
+            <section class="tab-content" id="tab-privacy">
+                <div class="page-title-bar">
+                    <div>
+                        <h2><i class="fa-solid fa-user-shield"></i> Privacy Suite & DPDP Act 2023 / GDPR</h2>
+                        <p>User data rights, log redaction policy, and one-click data erasure.</p>
+                    </div>
+                </div>
+
+                <div class="privacy-container">
+                    <div class="card privacy-card">
+                        <h3><i class="fa-solid fa-trash-arrow-up"></i> Data Erasure & PII Protection</h3>
+                        <p class="text-muted">In compliance with the DPDP Act 2023 and GDPR, generated test numbers and active session logs are treated as personal data. You can delete all your stored data at any time.</p>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-danger" id="btn-purge-data">
+                                <i class="fa-solid fa-trash-can"></i> Purge All Saved User Data Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card privacy-card">
+                        <h3><i class="fa-solid fa-eye-slash"></i> Log Redaction & No-Logging Policy</h3>
+                        <ul class="step-list">
+                            <li><strong>Zero Number Logging</strong>: Phone numbers and OTP values are never written to server log files.</li>
+                            <li><strong>Redacted Headers</strong>: API keys and authorization tokens are masked in stdout logs.</li>
+                            <li><strong>Cookie Consent</strong>: Strictly necessary session tokens only.</li>
+                        </ul>
+                        <div class="mt-3">
+                            <button class="btn btn-secondary btn-sm" id="btn-view-privacy-policy">View Privacy Policy</button>
+                            <button class="btn btn-secondary btn-sm" id="btn-report-abuse">Report Abuse</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Touch-Friendly Mobile Bottom Navigation Bar -->
+    <div class="mobile-bottom-nav">
+        <a href="#dashboard" class="mobile-nav-item active" data-tab="dashboard">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span>Home</span>
+        </a>
+        <a href="#generator" class="mobile-nav-item" data-tab="generator">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Generate</span>
+        </a>
+        <a href="#inbox" class="mobile-nav-item" data-tab="inbox">
+            <i class="fa-solid fa-inbox"></i>
+            <span>Inbox</span>
+        </a>
+        <a href="#security" class="mobile-nav-item" data-tab="security">
+            <i class="fa-solid fa-lock"></i>
+            <span>Security</span>
+        </a>
+        <a href="#privacy" class="mobile-nav-item" data-tab="privacy">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Privacy</span>
+        </a>
+    </div>
+
+    <!-- DPDP Act / GDPR Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner">
+        <div class="cookie-content">
+            <i class="fa-solid fa-cookie-bite"></i>
+            <span>We use essential cookies to enforce rate limiting and session security in compliance with DPDP Act 2023 & GDPR.</span>
+        </div>
+        <div class="cookie-actions">
+            <button class="btn btn-sm btn-secondary" id="btn-cookie-decline">Decline</button>
+            <button class="btn btn-sm btn-crimson" id="btn-cookie-accept">Accept Cookies</button>
+        </div>
+    </div>
+
+    <!-- Modals: Terms, Privacy, Report Abuse -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Terms of Service</h3>
+                <button class="close-modal" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Content injected dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-modal-dismiss">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
